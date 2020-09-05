@@ -1,36 +1,49 @@
 import pygame
 import socket
+import numpy as np
 
 from launch_screen import welcome_screen
 from create_party import create_party
 from join_party import join_party
+from game.battleship import battleship_game
+from game.missile import launch_missiles
 import pygame_textinput
 
 pygame.init()
 pygame.mixer.quit()
 screen = pygame.display.set_mode([1280, 720])
 
+CELLS = 10
+BOARD = np.zeros(shape=(CELLS,CELLS), dtype=int)
+
 welcome_screen = welcome_screen(screen=screen, pygame=pygame)
-create_party = create_party(screen=screen, pygame=pygame, socket=socket)
+create_party = create_party(screen=screen, pygame=pygame, socket=socket, server=None)
 join_party = join_party(screen=screen, pygame=pygame, socket=socket)
+game = battleship_game(screen=screen, pygame=pygame, socket=socket, board=BOARD)
 
 textinput = pygame_textinput.TextInput()
 ipinput = pygame_textinput.TextInput()
 
 welcome_screen.run()
 
-classes = [welcome_screen, create_party, join_party]
+classes = [welcome_screen, create_party, join_party, game]
 Class = welcome_screen
 
 clock = pygame.time.Clock()
 
 changeClass_create_party = False
+changeClass_join_party = False
+changeClass_boat_locations = False
+
 runclass_create_party = False
 runclass_join_party = False
+runclass_choose_boat_locations = False
+runclass_fire_missiles = False
 
 loading = False
 got_username = False
 got_ip = False
+missile_first_time = True
 
 file_number = 0
 loading_images = []
@@ -57,13 +70,30 @@ while file_number < 214:
     loading_images.append(img)
     file_number = file_number + 1
 
-print(loading_images)
+
 
 file_number = 0
 first_time = True
+second_time = True
+first_connect = True
+choose_locations_first_time = True
+place_boats = False
+joined_party = False
+
+image = ""
+ship = ""
+
+opp_username = None
+server = None
+start_battle = True
+
+client_board = None
+server_board = None
+change_board = False
+
 
 while True:
-   clock.tick(60)
+   clock.tick(120)
    events = pygame.event.get()
 
    for event in events:
@@ -79,8 +109,50 @@ while True:
                    changeClass_create_party = True
                    loading = True
            elif Class == classes[1]:
-               if x>= 448 and x <= 850 and y >= 569 and y <= 703:
-                   print("Start Battle")
+               if Class.start_game:
+                   if x>= 448 and x <= 850 and y >= 569 and y <= 703:
+                       print("Start Battle")
+                       changeClass_boat_locations = True
+                       changeClass_create_party = False
+                       changeClass_join_party = False
+                       runclass_create_party = False
+                       runclass_join_party = False
+                       loading = True
+           elif Class == classes[3]:
+               dir = "//Users/atulphadke/Documents/Projects/battleship/images/"
+               if x >= 36 and x <= 334 and y >= 446 and y <= 483:
+                   if game.Submarine_counter != 0:
+                       image = pygame.image.load(dir + "image1.png")
+                       ship = "Submarine"
+               elif x >= 28 and x <= 311 and y >= 343 and y <= 389:
+                   if game.Reg_Ship_counter != 0:
+                       image = pygame.image.load(dir + "image2.png")
+                       ship = "Regular_Ship"
+
+               elif x >= 33 and x <= 494 and y >= 658 and y <= 696:
+                   if game.Carrier_counter != 0:
+                       image = pygame.image.load(dir + "image3.png")
+                       ship = "Carrier"
+
+               elif x >= 36 and x <= 382 and y >= 554 and y <= 583:
+                   if game.Battle_Ship_counter != 0:
+                       image = pygame.image.load(dir + "image4.png")
+                       ship = "Battle_Ship"
+
+               elif x >= 28 and x <= 216 and y >= 253 and y <= 286:
+                   if game.Small_Ship_counter != 0:
+                       image = pygame.image.load(dir + "image5.png")
+                       ship = "Small_Ship"
+
+               elif x >= 30 and x <= 130 and y >= 200 and y <= 230:
+                   start_battle = True
+
+           elif Class == launch_missiles:
+               x, y = pygame.mouse.get_pos()
+               x = math.floor((x - 650) / 60)
+               y = math.floor((y - 90) / 60)
+               change_board = True
+               #client_player.change_board(x, y)
 
    if loading:
        if file_number == 0:
@@ -92,10 +164,14 @@ while True:
            elif changeClass_join_party:
                runclass_join_party = True
                loading = False
+           elif changeClass_boat_locations:
+               print("heeer")
+               runclass_choose_boat_locations = True
+               runclass_create_party = False
+               loading = False
        else:
            screen.blit(loading_images[file_number - 1], (240, 60))
            pygame.display.update(img.get_rect())
-           pygame.time.delay(10)
            file_number = file_number + 1
 
    if runclass_create_party:
@@ -112,7 +188,9 @@ while True:
 
        else:
            Class = classes[1]
-           Class.run(username=username, first_time=first_time)
+           change_second_time = Class.run(username=username, first_time=first_time, second_time=second_time, changeClass_boat_locations=changeClass_boat_locations, sendBoat=False)
+           if not change_second_time:
+               second_time = change_second_time
            first_time = False
 
    elif runclass_join_party:
@@ -140,4 +218,69 @@ while True:
                    got_ip = True
            else:
                Class = classes[2]
-               Class.run(username=username, IP=ip)
+               place_boats = Class.run(username=username, IP=ip, first_connect=first_connect)
+               print("ran")
+               if place_boats:
+                   changeClass_boat_locations = True
+                   changeClass_create_party = False
+                   changeClass_join_party = False
+                   runclass_create_party = False
+                   runclass_join_party = False
+                   joined_party = True
+                   loading = True
+               first_connect = False
+
+   elif runclass_choose_boat_locations:
+       if choose_locations_first_time:
+           if not joined_party:
+               create_party.run(username=username, first_time=first_time, second_time=second_time, changeClass_boat_locations=changeClass_boat_locations, sendBoat=True)
+               sendBoat = False
+           game.run_first()
+           pygame.display.update()
+           BOARD_CELL_POS = game.generate_board_positions()
+           choose_locations_first_time = False
+           Class = classes[3]
+       else:
+           if image != "":
+               game.load_image_to_mouse(image, event)
+           if ship != "" and event.type == pygame.MOUSEBUTTONDOWN:
+               change_image = game.calc_position(ship=ship)
+               print(change_image)
+               if change_image:
+                   image = ""
+                   ship = ""
+                   game.run_first()
+                   pygame.display.update()
+           if start_battle and joined_party:
+               client_board = game.board
+               is_client = True
+               is_server = False
+               runclass_choose_boat_locations = False
+               client_player = launch_missiles(screen=screen, pygame=pygame, socket=socket, board=client_board, is_client=is_client,
+                               is_server=is_server)
+               runclass_fire_missiles = True
+           elif start_battle:
+               server_board = game.board
+               is_client = False
+               is_server = True
+               runclass_choose_boat_locations = False
+               server_player = launch_missiles(screen=screen, pygame=pygame, socket=socket, board=server_board, is_client=is_client,
+                               is_server=is_server)
+               runclass_fire_missiles = True
+
+   elif runclass_fire_missiles:
+       if missile_first_time:
+           Class = launch_missiles
+           missile_first_time = not missile_first_time
+       if server_player:
+           server_player.run(IP=None)
+           if change_board:
+               change_board = False
+               server_player.change_board(x, y)
+       else:
+           client_player.run(IP=str(join_party.decrypted))
+           if change_board:
+               change_board = False
+               client_player.change_board(x, y)
+
+
