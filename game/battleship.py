@@ -14,7 +14,7 @@ class battleship_game:
         self.board = board
         self.cell_offset = cell_offset
         self.rotated = False
-        self.dir = os.path.dirname(os.path.realpath(sys.argv[0])) - "/game"
+        self.dir = os.path.dirname(os.path.realpath(sys.argv[0])).replace("/game", "")
         self.Submarine = self.pygame.image.load(self.dir + "/images/" + "image1.png")
         self.Reg_Ship = self.pygame.image.load(self.dir + "/images/" + "image2.png")
         self.Carrier = self.pygame.image.load(self.dir + "/images/" + "image3.png")
