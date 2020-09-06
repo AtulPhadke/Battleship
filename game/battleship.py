@@ -2,7 +2,7 @@ import pygame
 import socket
 import numpy as np
 import math
-
+import os
 
 class battleship_game:
 
@@ -13,12 +13,12 @@ class battleship_game:
         self.board = board
         self.cell_offset = cell_offset
         self.rotated = False
-        dir = "//Users/atulphadke/Documents/Projects/battleship/images/"
-        self.Submarine = self.pygame.image.load(dir + "image1.png")
-        self.Reg_Ship = self.pygame.image.load(dir + "image2.png")
-        self.Carrier = self.pygame.image.load(dir + "image3.png")
-        self.Battle_Ship = self.pygame.image.load(dir + "image4.png")
-        self.Small_Ship = self.pygame.image.load(dir + "image5.png")
+        self.dir = os.path.dirname(os.path.realpath(sys.argv[0])) - "/game"
+        self.Submarine = self.pygame.image.load(self.dir + "/images/" + "image1.png")
+        self.Reg_Ship = self.pygame.image.load(self.dir + "/images/" + "image2.png")
+        self.Carrier = self.pygame.image.load(self.dir + "/images/" + "image3.png")
+        self.Battle_Ship = self.pygame.image.load(self.dir + "/images/" + "image4.png")
+        self.Small_Ship = self.pygame.image.load(self.dir + "/images/" + "image5.png")
         self.Small_Ship_counter = 1
         self.Reg_Ship_counter = 1
         self.Carrier_counter = 1
@@ -29,7 +29,7 @@ class battleship_game:
 
     def background(self):
         self.screen.fill((13, 17, 31))
-        font = self.pygame.font.Font("//Users/atulphadke/Documents/Projects/battleship/coolvetica rg.ttf", 72)
+        font = self.pygame.font.Font(self.dir + "/coolvetica rg.ttf", 72)
         Title = font.render("Battle Ship", True, (255, 255, 255))
         self.screen.blit(Title, (30, 30))
 
@@ -53,7 +53,7 @@ class battleship_game:
     def draw_numbers(self):
         alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
         for idx, i in enumerate(self.board):
-            font = self.pygame.font.Font("//Users/atulphadke/Documents/Projects/battleship/coolvetica rg.ttf", 48)
+            font = self.pygame.font.Font(self.dir + "/coolvetica rg.ttf", 48)
             counter = font.render(str(idx + 1), True, (255, 255, 255))
             if (idx+1) != 10:
                 self.screen.blit(counter, (620 + (idx) * 65, 8))
@@ -68,7 +68,7 @@ class battleship_game:
 
     def draw_boats(self):
 
-        font = self.pygame.font.Font("//Users/atulphadke/Documents/Projects/battleship/coolvetica rg.ttf", 72)
+        font = self.pygame.font.Font(self.dir + "/coolvetica rg.ttf", 72)
         Small_Ship_counter = font.render(str(self.Small_Ship_counter), True, (255, 255, 255))
         Reg_Ship_counter = font.render(str(self.Reg_Ship_counter), True, (255, 255, 255))
         Submarine_counter = font.render(str(self.Submarine_counter), True, (255, 255, 255))
