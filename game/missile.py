@@ -18,7 +18,7 @@ class launch_missiles:
         self.is_client = is_client
         self.is_server = is_server
         self.our_turn = is_client
-        self.dir = os.path.dirname(os.path.realpath(sys.argv[0])) - "/game"
+        self.dir = os.path.dirname(os.path.realpath(sys.argv[0])).replace("/game", "")
         self.cell_offset = 0
         self.first = True
         self.very_first = True
