@@ -3,6 +3,7 @@ import socket
 import numpy as np
 import math
 import os
+import sys
 
 class battleship_game:
 
