@@ -119,7 +119,7 @@ while True:
                        runclass_join_party = False
                        loading = True
            elif Class == classes[3]:
-               dir = "//Users/atulphadke/Documents/Projects/battleship/images/"
+               dir = "images/"
                if x >= 36 and x <= 334 and y >= 446 and y <= 483:
                    if game.Submarine_counter != 0:
                        image = pygame.image.load(dir + "image1.png")
