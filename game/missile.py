@@ -5,6 +5,7 @@ import math
 import random
 import time
 import sys
+import os
 
 class launch_missiles:
 
@@ -17,6 +18,7 @@ class launch_missiles:
         self.is_client = is_client
         self.is_server = is_server
         self.our_turn = is_client
+        self.dir = os.path.dirname(os.path.realpath(sys.argv[0])) - "/game"
         self.cell_offset = 0
         self.first = True
         self.very_first = True
@@ -29,7 +31,7 @@ class launch_missiles:
                 self.board[i_idx][j_idx] = random.randint(0, 1)
 
     def title(self):
-        font = self.pygame.font.Font("//Users/atulphadke/Documents/Projects/battleship/coolvetica rg.ttf", 48)
+        font = self.pygame.font.Font(self.dir + "/coolvetica rg.ttf", 48)
         self.screen.fill((13, 17, 31))
         your_board = font.render("Your Board", True, (255, 255, 255))
         self.screen.blit(your_board, (200, 10))
@@ -95,7 +97,7 @@ class launch_missiles:
         self.cell_offset = 0
 
     def turn(self):
-        font = self.pygame.font.Font("//Users/atulphadke/Documents/Projects/battleship/coolvetica rg.ttf", 36)
+        font = self.pygame.font.Font(self.dir + "/coolvetica rg.ttf", 36)
         if self.our_turn:
             myTurn = font.render("Your Turn!", True, (255, 255, 255))
             self.screen.blit(myTurn, (560, 20))
@@ -115,7 +117,7 @@ class launch_missiles:
         print("overall sent")
 
     def missed_hit(self, description):
-        font = self.pygame.font.Font("//Users/atulphadke/Documents/Projects/battleship/coolvetica rg.ttf", 32)
+        font = self.pygame.font.Font(self.dir + "/coolvetica rg.ttf", 32)
         description = font.render(str(description) + "!", True, (255, 255, 255))
         self.screen.blit(description, (30, 20))
         self.pygame.display.update()
