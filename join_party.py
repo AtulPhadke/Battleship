@@ -22,25 +22,25 @@ class join_party:
 
     def connect_to_client(self, HOST, username):
         self.client = self.socket.socket(self.socket.AF_INET, self.socket.SOCK_STREAM)
+        print(HOST)
         self.client.connect((HOST, 8080))
         self.client.send(bytes(username, 'utf-8'))
 
     def decrypt(self, IP):
-        decrypted = ""
+        self.decrypted = ""
         for character in IP:
             if character == "#":
-                next_char = next_char + "."
+                next_char = "."
             else:
                 next_char = str(ord(character) - 98)
-            decrypted = decrypted + next_char
-        return decrypted
+            self.decrypted = self.decrypted + next_char
 
     def run(self, username, IP, first_connect):
         self.background()
         self.Title()
-        self.decrypted = self.decrypt(IP=IP)
-        if decrypted and first_connect:
-            self.connect_to_client(decrypted, username=username)
+        self.decrypt(IP=IP)
+        if self.decrypted and first_connect:
+            self.connect_to_client(self.decrypted, username=username)
             self.waiting_for_game = True
         self.pygame.display.update()
         if self.waiting_for_game2:
