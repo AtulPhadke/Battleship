@@ -27,11 +27,14 @@ class create_party:
         s.connect(("8.8.8.8", 80))
         font = self.pygame.font.Font("coolvetica rg.ttf", 72)
         font_sized = self.pygame.font.Font("coolvetica rg.ttf", 60)
-        IP = s.getsockname()[0].replace(".", "")
+        IP = s.getsockname()[0]
         s.close()
         encrypted = ""
         for character in IP:
-            encrypted = encrypted + chr(98 + int(character))
+            if character == ".":
+                encrypted = encrypted + "#"
+            else:
+                encrypted = encrypted + chr(98 + int(character))
         IP_enter = font_sized.render(str(encrypted), True, (0,0,0))
         party_IP = font.render("Party Code", True, (0,0,0))
         self.screen.blit(party_IP, (900, 30))
