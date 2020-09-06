@@ -28,9 +28,10 @@ class join_party:
     def decrypt(self, IP):
         decrypted = ""
         for character in IP:
-            next_char = str(ord(character) - 98)
-            if next_char == '2' or next_char == '8':
+            if character == "#":
                 next_char = next_char + "."
+            else:
+                next_char = str(ord(character) - 98)
             decrypted = decrypted + next_char
         return decrypted
 
@@ -38,7 +39,6 @@ class join_party:
         self.background()
         self.Title()
         self.decrypted = self.decrypt(IP=IP)
-        self.decrypted = decrypted.replace("111", "1.11")
         if decrypted and first_connect:
             self.connect_to_client(decrypted, username=username)
             self.waiting_for_game = True
