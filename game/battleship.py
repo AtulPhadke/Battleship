@@ -25,7 +25,7 @@ class battleship_game:
         self.Carrier_counter = 1
         self.Battle_Ship_counter = 1
         self.Submarine_counter = 1
-        self.Ready = self.pygame.image.load(dir + "Battle.Ready.png")
+        self.Ready = self.pygame.image.load(self.dir + "/images/" + "Battle.Ready.png")
         self.Ready = self.pygame.transform.scale(self.Ready, (480, 360))
 
     def background(self):
