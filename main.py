@@ -6,8 +6,8 @@ import math
 from launch_screen import welcome_screen
 from create_party import create_party
 from join_party import join_party
-from game.battleship import battleship_game
-from game.missile import launch_missiles
+from battleship import battleship_game
+from missile import launch_missiles
 import pygame_textinput
 
 pygame.init()
@@ -122,7 +122,7 @@ while True:
                        runclass_join_party = False
                        loading = True
            elif Class == classes[3]:
-               dir = "//Users/atulphadke/Documents/Projects/battleship/images/"
+               dir = "images/"
 
                print(x, y)
                if x >= 36 and x <= 334 and y >= 446 and y <= 483:
