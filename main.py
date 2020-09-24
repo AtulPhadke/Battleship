@@ -223,9 +223,9 @@ while True:
            if not got_ip:
                screen.fill((214, 229, 255))
                returned = ipinput.update(events)
-               length = len(textinput.get_text())
+               length = len(ipinput.get_text())
                get_ip()
-               screen.blit(textinput.get_surface(), (640 - length * 7, 360))
+               screen.blit(ipinput.get_surface(), (640 - length * 7, 360))
                pygame.display.update()
 
                if returned:
