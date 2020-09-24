@@ -50,14 +50,18 @@ file_number = 0
 loading_images = []
 
 def get_username():
+    img = pygame.image.load("Text_box.png")
+    screen.blit(img, (150, 230))
     font = pygame.font.Font("coolvetica rg.ttf", 72)
     Title = font.render("Type in your Username!", True, (0, 0, 0))
-    screen.blit(Title, (550, 600))
+    #screen.blit(Title, (550, 600))
 
 def get_ip():
+    img = pygame.image.load("Text_box.png")
+    screen.blit(img, (150, 230))
     font = pygame.font.Font("coolvetica rg.ttf", 72)
     Title = font.render("Type in the Party Code!", True, (0, 0, 0))
-    screen.blit(Title, (500, 600))
+    #screen.blit(Title, (500, 600))
 
 while file_number < 214:
 
@@ -166,9 +170,11 @@ while True:
        if file_number > 214:
            if changeClass_create_party:
                runclass_create_party = True
+               textinput.input_string = "Type In Your Username!"
                loading = False
            elif changeClass_join_party:
                runclass_join_party = True
+               textinput.input_string = "Type In Your Username!"
                loading = False
            elif changeClass_boat_locations:
                print("heeer")
@@ -184,10 +190,10 @@ while True:
        if not got_username:
            screen.fill((214, 229, 255))
            returned = textinput.update(events)
-           screen.blit(textinput.get_surface(), (10,10))
+           length = len(textinput.get_text())
            get_username()
+           screen.blit(textinput.get_surface(), (640-length*7,360))
            pygame.display.update()
-
            if returned:
                username = textinput.get_text()
                got_username = True
@@ -203,11 +209,13 @@ while True:
        if not got_username:
            screen.fill((214, 229, 255))
            returned = textinput.update(events)
-           screen.blit(textinput.get_surface(), (10,10))
+           length = len(textinput.get_text())
            get_username()
+           screen.blit(textinput.get_surface(), (640 - length * 7, 360))
            pygame.display.update()
 
            if returned:
+               textinput.input_string = "Type In the Party Code!"
                username = textinput.get_text()
                got_username = True
 
@@ -215,8 +223,9 @@ while True:
            if not got_ip:
                screen.fill((214, 229, 255))
                returned = ipinput.update(events)
-               screen.blit(ipinput.get_surface(), (10, 10))
+               length = len(textinput.get_text())
                get_ip()
+               screen.blit(textinput.get_surface(), (640 - length * 7, 360))
                pygame.display.update()
 
                if returned:
@@ -290,6 +299,3 @@ while True:
            if change_board:
                change_board = False
                client_player.change_board(x, y)
-
-
-

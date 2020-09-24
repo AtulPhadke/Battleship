@@ -37,31 +37,35 @@ class create_party:
                 encrypted = encrypted + chr(98 + int(character))
         IP_enter = font_sized.render(str(encrypted), True, (0,0,0))
         party_IP = font.render("Party Code", True, (0,0,0))
+        UNDERLINE = self.pygame.Rect(920, 110, 300, 4)
+        self.pygame.draw.rect(self.screen, (0, 0, 0), UNDERLINE)
         self.screen.blit(party_IP, (900, 30))
-        self.screen.blit(IP_enter, (960, 120))
+        self.screen.blit(IP_enter, (900, 120))
 
     def display_username(self, username):
-        font = self.pygame.font.Font("coolvetica rg.ttf", 72)
+        font = self.pygame.font.Font("bit.TTF", 36)
         Title = font.render(username, True, (0, 0, 0))
-        self.screen.blit(Title, (100, 300))
+        self.screen.blit(Title, (100, 325))
 
     def versus(self):
-        font = self.pygame.font.Font("coolvetica rg.ttf", 72)
-        Title = font.render("versus", True, (0, 0, 0))
-        self.screen.blit(Title, (550, 300))
+        font = self.pygame.font.Font("bit.TTF", 72)
+        Title = font.render("VERSUS", True, (0, 0, 0))
+        self.screen.blit(Title, (420, 305))
 
     def pending_oppenent_username(self, data):
-        font = self.pygame.font.Font("coolvetica rg.ttf", 72)
+        font = self.pygame.font.Font("bit.TTF", 36)
         if not data:
             Title = font.render("Pending....", True, (0, 0, 0))
         else:
             Title = font.render(str(data), True, (0, 0, 0))
-        self.screen.blit(Title, (950, 300))
+        self.screen.blit(Title, (950, 325))
 
     def title(self):
-        font = self.pygame.font.Font("coolvetica rg.ttf", 72)
-        Title = font.render("Battle Ship", True, (0,0,0))
+        font = self.pygame.font.Font("bit.TTF", 72)
+        Title = font.render("BattleShip", True, (0,0,0))
         self.screen.blit(Title, (30, 30))
+        UNDERLINE = self.pygame.Rect(40, 110, 500, 4)
+        #self.pygame.draw.rect(self.screen, (0,0,0), UNDERLINE)
 
     def beginBattle(self):
         button = self.pygame.image.load("images/Battle.Begin.png")

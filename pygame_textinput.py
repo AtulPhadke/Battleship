@@ -66,7 +66,7 @@ class TextInput:
         self.cursor_surface.fill(cursor_color)
         self.cursor_position = len(initial_string)  # Inside text
         self.cursor_visible = True  # Switches every self.cursor_switch_ms ms
-        self.cursor_switch_ms = 500  # /|\
+        self.cursor_switch_ms = 500  # /|\A
         self.cursor_ms_counter = 0
 
         self.clock = pygame.time.Clock()
@@ -75,7 +75,8 @@ class TextInput:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 self.cursor_visible = True  # So the user sees where he writes
-
+                if self.input_string == "Type In the Party Code!" or self.input_string == "Type In Your Username!":
+                    self.input_string = ""
                 # If none exist, create counter for that key:
                 if event.key not in self.keyrepeat_counters:
                     self.keyrepeat_counters[event.key] = [0, event.unicode]
@@ -199,7 +200,7 @@ if __name__ == "__main__":
         # Feed it with events every frame
         textinput.update(events)
         # Blit its surface onto the screen
-        screen.blit(textinput.get_surface(), (10, 10))
+        screen.blit(textinput.get_surface(), (500, 50))
 
         pygame.display.update()
         clock.tick(30)
